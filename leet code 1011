@@ -1,0 +1,42 @@
+#include <stdio.h>
+int max(int arr[], int n) {
+    int m = arr[0];
+    for(int i=1;i<n;i++)
+        if(arr[i]>m) m=arr[i];
+    return m;
+}
+int sum(int arr[], int n) {
+    int s=0;
+    for(int i=0;i<n;i++) s+=arr[i];
+    return s;
+}
+int canShip(int arr[], int n, int days, int cap) {
+    int d=1, curr=0;
+    for(int i=0;i<n;i++) {
+        if(curr + arr[i] > cap) { d++; curr=0; }
+        curr += arr[i];
+    }
+    return d <= days;
+}
+int shipWithinDays(int arr[], int n, int days) {
+    int left = max(arr, n), right = sum(arr, n), ans = right;
+    while(left <= right) {
+        int mid = left + (right-left)/2;
+        if(canShip(arr, n, days, mid)) { ans = mid; right = mid-1; }
+        else left = mid+1;
+    }
+    return ans;
+}
+int main() {
+    int weights[] = {10, 20, 30, 40, 50};
+    int days = 3;
+    int n = sizeof(weights)/sizeof(weights[0]);
+    printf("Minimum capacity: %d\n", shipWithinDays(weights, n, days));
+    return 0;
+}
+
+
+
+
+
+
